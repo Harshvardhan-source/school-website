@@ -5,92 +5,64 @@ import './Gallery.css';
 const categories = ['All', 'Assembly', 'Events', 'Students', 'Celebrations', 'Early Learning'];
 
 const images = [
-  { id: 1, src: '/photo5.jpeg', title: 'Morning Assembly', category: 'Assembly', caption: 'Daily morning assembly — a tradition of unity and discipline' },
-  { id: 2, src: '/photo4.jpeg', title: 'Annual Day', category: 'Celebrations', caption: 'Annual Day — students shine in their finest attire' },
-  { id: 3, src: '/photo2.jpeg', title: 'Cultural Excursion', category: 'Events', caption: 'Students at Indira Kala Mandira for a cultural excursion' },
-  { id: 4, src: '/photo1.jpeg', title: 'Class Portrait', category: 'Students', caption: 'Class photograph with their class teacher' },
-  { id: 5, src: '/photo3.jpeg', title: 'Early Learning Circle', category: 'Early Learning', caption: 'Pre-primary students in a morning prayer circle with their teacher' },
-  { id: 6, src: '/photo5.jpeg', title: 'Assembly Ground', category: 'Assembly', caption: 'A bird\'s-eye view of the school assembly — discipline in rows' },
-  { id: 7, src: '/photo4.jpeg', title: 'Cultural Performance', category: 'Celebrations', caption: 'Students dressed for the annual cultural performance' },
-  { id: 8, src: '/photo1.jpeg', title: 'Senior Students', category: 'Students', caption: 'Senior students in the school\'s signature maroon blazer uniform' },
-  { id: 9, src: '/photo2.jpeg', title: 'School Event', category: 'Events', caption: 'Teachers and students at an interschool cultural programme' },
-  { id: 10, src: '/photo3.jpeg', title: 'Pre-Primary Class', category: 'Early Learning', caption: 'Young learners engaged in guided prayer activity on the school lawn' },
+  { id: 1, src: '/photo5.jpeg', title: 'Morning Assembly', category: 'Assembly', caption: 'Daily assembly — unity and discipline from the first bell', span: true },
+  { id: 2, src: '/photo4.jpeg', title: 'Annual Day', category: 'Celebrations', caption: 'Students shine at the annual day celebrations', tall: true },
+  { id: 3, src: '/photo2.jpeg', title: 'Cultural Excursion', category: 'Events', caption: 'At Indira Kala Mandira — arts and culture beyond campus' },
+  { id: 4, src: '/photo1.jpeg', title: 'Class Portrait', category: 'Students', caption: 'Class photograph with their beloved teacher' },
+  { id: 5, src: '/photo3.jpeg', title: 'Early Learning Circle', category: 'Early Learning', caption: 'Morning prayer with their teacher on the school lawn' },
+  { id: 6, src: '/photo5.jpeg', title: 'Assembly Ground', category: 'Assembly', caption: "Bird's-eye view of the school assembly", span: true },
+  { id: 7, src: '/photo1.jpeg', title: 'Senior Batch', category: 'Students', caption: 'Senior students in the maroon blazer uniform' },
+  { id: 8, src: '/photo2.jpeg', title: 'School Event', category: 'Events', caption: 'Teachers and students at an interschool programme' },
+  { id: 9, src: '/photo4.jpeg', title: 'Cultural Performance', category: 'Celebrations', caption: 'Dressed for the annual cultural performance' },
+  { id: 10, src: '/photo3.jpeg', title: 'Pre-Primary Class', category: 'Early Learning', caption: 'Activity-based early learning in action' },
 ];
 
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightbox, setLightbox] = useState(null);
 
-  const filtered = activeCategory === 'All'
-    ? images
-    : images.filter(img => img.category === activeCategory);
-
-  const openLightbox = (img) => setLightbox(img);
-  const closeLightbox = () => setLightbox(null);
+  const filtered = activeCategory === 'All' ? images : images.filter(i => i.category === activeCategory);
 
   const navigate = (dir) => {
     const idx = filtered.findIndex(i => i.id === lightbox.id);
-    const next = (idx + dir + filtered.length) % filtered.length;
-    setLightbox(filtered[next]);
+    setLightbox(filtered[(idx + dir + filtered.length) % filtered.length]);
   };
 
   return (
     <div>
-      <PageHero
-        eyebrow="Photo Gallery"
-        title="Our School in Pictures"
-        subtitle="Moments of learning, celebration, and community — captured through the lens."
-        bgImage="/photo5.jpeg"
-      />
+      <PageHero eyebrow="Photo Gallery" title="Our School in Pictures" subtitle="Moments of learning, celebration, and community — captured through the lens." bgImage="/photo5.jpeg" />
 
       <section className="section">
         <div className="container">
-          {/* Filter Bar */}
           <div className="gallery-filters">
             {categories.map(cat => (
-              <button
-                key={cat}
-                className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
+              <button key={cat} className={"filter-btn" + (activeCategory === cat ? " active" : "")} onClick={() => setActiveCategory(cat)}>{cat}</button>
             ))}
           </div>
 
-          {/* Gallery Grid */}
           <div className="gallery-grid">
             {filtered.map((img, i) => (
               <div
                 key={img.id}
-                className={`gallery-item ${i === 0 ? 'wide' : ''}`}
-                onClick={() => openLightbox(img)}
+                className={"gallery-item" + (img.span ? " span-2" : "") + (img.tall ? " tall" : "")}
+                onClick={() => setLightbox(img)}
               >
                 <img src={img.src} alt={img.title} loading="lazy" />
                 <div className="gallery-item-overlay">
-                  <div className="gallery-item-info">
-                    <span className="gallery-item-cat">{img.category}</span>
-                    <h4>{img.title}</h4>
-                    <p>{img.caption}</p>
-                  </div>
-                  <div className="gallery-zoom-icon">🔍</div>
+                  <span className="gallery-item-cat">{img.category}</span>
+                  <div className="gallery-item-title">{img.title}</div>
+                  <div className="gallery-item-caption">{img.caption}</div>
                 </div>
+                <div className="gallery-zoom">🔍</div>
               </div>
             ))}
           </div>
-
-          {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px', color: 'var(--text-muted)' }}>
-              No images in this category yet.
-            </div>
-          )}
         </div>
       </section>
 
-      {/* Lightbox */}
       {lightbox && (
-        <div className="lightbox" onClick={closeLightbox}>
-          <button className="lightbox-close" onClick={closeLightbox}>✕</button>
+        <div className="lightbox" onClick={() => setLightbox(null)}>
+          <button className="lightbox-close" onClick={() => setLightbox(null)}>✕</button>
           <button className="lightbox-nav prev" onClick={e => { e.stopPropagation(); navigate(-1); }}>‹</button>
           <div className="lightbox-inner" onClick={e => e.stopPropagation()}>
             <img src={lightbox.src} alt={lightbox.title} />

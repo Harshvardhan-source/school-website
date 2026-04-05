@@ -19,7 +19,7 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -28,35 +28,44 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top info bar */}
       <div className="topbar">
         <div className="container topbar-inner">
           <div className="topbar-left">
-            <span>📞 080 2666 7999</span>
-            <span>✉ office@st-philomena.org</span>
+            <div className="topbar-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              <a href="tel:08026667999">080 2666 7999</a>
+            </div>
+            <div className="topbar-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <a href="mailto:office@st-philomena.org">office@st-philomena.org</a>
+            </div>
           </div>
-          <div className="topbar-right">
-            <span className="admissions-badge">🎓 Admissions Open 2024–25</span>
+          <div className="admissions-pill">
+            <div className="pulse-dot" />
+            Admissions Open 2024-25
           </div>
         </div>
       </div>
 
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+      <nav className={"navbar" + (scrolled ? " scrolled" : "")}>
         <div className="container navbar-inner">
           <Link to="/" className="navbar-brand">
-            <img src="/logo.jpeg" alt="St. Philomena's School Logo" className="navbar-logo" />
-            <div className="navbar-brand-text">
+            <div className="navbar-logo-wrap">
+              <img src="/logo.jpeg" alt="St. Philomena's School" className="navbar-logo" />
+              <div className="navbar-logo-ring" />
+            </div>
+            <div className="brand-text">
               <span className="brand-name">St. Philomena's</span>
-              <span className="brand-sub">English School</span>
+              <span className="brand-tagline">English School · K.S. Layout</span>
             </div>
           </Link>
 
-          <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
+          <ul className={"navbar-links" + (menuOpen ? " open" : "")}>
             {navLinks.map(link => (
               <li key={link.path}>
                 <NavLink
                   to={link.path}
-                  className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                  className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
                   end={link.path === '/'}
                 >
                   {link.label}
@@ -68,12 +77,8 @@ export default function Navbar() {
             </li>
           </ul>
 
-          <button
-            className={`hamburger ${menuOpen ? 'open' : ''}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span></span><span></span><span></span>
+          <button className={"hamburger" + (menuOpen ? " open" : "")} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+            <span /><span /><span />
           </button>
         </div>
       </nav>

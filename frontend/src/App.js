@@ -18,10 +18,27 @@ function ScrollToTop() {
   return null;
 }
 
+function ScrollReveal() {
+  useEffect(() => {
+    const setup = () => {
+      const els = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(el => obs.observe(el));
+      return () => obs.disconnect();
+    };
+    const timer = setTimeout(setup, 100);
+    return () => clearTimeout(timer);
+  });
+  return null;
+}
+
 function App() {
   return (
     <Router>
       <ScrollToTop />
+      <ScrollReveal />
       <Navbar />
       <main>
         <Routes>
